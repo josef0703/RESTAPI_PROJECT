@@ -1,15 +1,12 @@
 package com.example.gradletest3.controller;
 
 import com.example.gradletest3.dao.UserDTO;
-import com.example.gradletest3.dao.Userdao;
 import com.example.gradletest3.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -45,8 +42,24 @@ public class UserController {
 
     //로그인 POST
     @PostMapping("/login")
-    public String login(UserDTO userDTO) {
-        return null;
+    public String login(UserDTO userDTO, Model model) throws NullPointerException{
+
+        String returnURL = "";
+        UserDTO result = userService.login(userDTO);
+
+        if (result.getUserid() != null) {
+            returnURL = "redirect:/board";
+        } else {
+
+            returnURL = "redirect:/login";
+        }
+
+
+        System.out.println(result.getUserid());
+        model.addAttribute("userInfo", result.getUserid());
+
+
+        return returnURL;
     }
 
 }
