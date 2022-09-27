@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+<form th:action="@{/boardwrite}" method="post">
+
+    아이디 : <input type="text" th:name="b_writer" th:value="${user}"><br>
+    제목 : <input type="text" th:name="b_title"> <br>
+    내용 : <textarea th:name="b_content"></textarea> <br>
+
+
+
+    <input type="submit">
+</form>
+
+</body>
+</html>
