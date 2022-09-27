@@ -1,12 +1,15 @@
 package com.example.gradletest3.controller.user;
 
 import com.example.gradletest3.dao.user.UserDTO;
-import com.example.gradletest3.service.board.BoardService;
 import com.example.gradletest3.service.user.UserService;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -24,7 +27,7 @@ public class UserController {
     //회원가입 페이지
     @GetMapping("/join")
     public String joinPage() {
-        return "join";
+        return "/user/join";
     }
 
     //회원가입 POST
@@ -35,24 +38,27 @@ public class UserController {
 
         System.out.println(result);
 
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 
     //로그인 페이지
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/user/login";
     }
 
     //로그인 POST
     @PostMapping("/login")
-    public String login(UserDTO userDTO, Model model) {
+    public String login(UserDTO userDTO, Model model, HttpServletRequest req) {
 
         String returnURL = "";
+
         UserDTO result = userService.login(userDTO);
 
         if (result.getUserid() != null) {
-            returnURL = "redirect:/boardList";
+            HttpSession session = req.getSession(true);
+            session.setAttribute("user", result.getUserid());
+            returnURL = "redirect:/boardlist";
         } else {
 
             returnURL = "redirect:/login";
