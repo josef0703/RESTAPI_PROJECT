@@ -1,4 +1,4 @@
-package com.example.gradletest3.dao;
+package com.example.gradletest3.dao.user;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 @Mapper
-public interface Userdao {
+public interface UserDAO {
 
     @Select("select * from user_table")
     public List<UserDTO> selectAll();

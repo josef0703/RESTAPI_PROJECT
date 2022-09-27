@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>boardList</title>
+</head>
+<body>
+게시판
+
+<table th:border="1">
+    <tr>
+        <th th:text="번호"></th>
+        <th th:text="제목"></th>
+        <th th:text="내용"></th>
+        <th th:text="등록일자"></th>
+        <th th:text="조회수"></th>
+    </tr>
+    <tr th:each="board : ${boardlist}">
+        <td th:text="${board.b_num}"></td>
+        <td th:text="${board.b_title}"></td>
+        <td th:text="${board.b_content}"></td>
+<!--        <td th:text="${board.b_regdat}"></td>-->
+        <td th:text="${#dates.format(board.b_regdat,'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${board.b_hit}"></td>
+
+    </tr>
+</table>
+
+
+</body>
+</html>

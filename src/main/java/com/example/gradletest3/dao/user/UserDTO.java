@@ -1,4 +1,4 @@
-package com.example.gradletest3.dao;
+package com.example.gradletest3.dao.user;
 
 import lombok.Getter;
 import lombok.Setter;

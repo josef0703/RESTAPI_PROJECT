@@ -1,8 +1,8 @@
-package com.example.gradletest3.controller;
+package com.example.gradletest3.controller.user;
 
-import com.example.gradletest3.dao.UserDTO;
-import com.example.gradletest3.service.UserService;
-import org.apache.catalina.User;
+import com.example.gradletest3.dao.user.UserDTO;
+import com.example.gradletest3.service.board.BoardService;
+import com.example.gradletest3.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +13,13 @@ public class UserController {
 
     private final UserService userService;
 
+
     public UserController(UserService userService) {
         this.userService = userService;
+
     }
+
+
 
     //회원가입 페이지
     @GetMapping("/join")
@@ -42,13 +46,13 @@ public class UserController {
 
     //로그인 POST
     @PostMapping("/login")
-    public String login(UserDTO userDTO, Model model) throws NullPointerException{
+    public String login(UserDTO userDTO, Model model) {
 
         String returnURL = "";
         UserDTO result = userService.login(userDTO);
 
         if (result.getUserid() != null) {
-            returnURL = "redirect:/board";
+            returnURL = "redirect:/boardList";
         } else {
 
             returnURL = "redirect:/login";
@@ -61,5 +65,7 @@ public class UserController {
 
         return returnURL;
     }
+
+
 
 }

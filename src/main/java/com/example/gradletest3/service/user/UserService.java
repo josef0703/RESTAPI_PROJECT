@@ -1,7 +1,7 @@
-package com.example.gradletest3.service;
+package com.example.gradletest3.service.user;
 
-import com.example.gradletest3.dao.UserDTO;
-import com.example.gradletest3.dao.Userdao;
+import com.example.gradletest3.dao.user.UserDTO;
+import com.example.gradletest3.dao.user.UserDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final Userdao userdao;
+    private final UserDAO userdao;
 
-    public UserService(Userdao userdao) {
+    public UserService(UserDAO userdao) {
         this.userdao = userdao;
     }
 
