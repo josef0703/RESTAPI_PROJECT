@@ -27,4 +27,8 @@ public class BoardService {
     public BoardDTO boardone(int b_num) {
         return boardDAO.boardone(b_num);
     }
+
+    public int boardupdate(int b_num) {
+        return boardDAO.boardupdate(b_num);
+    }
 }

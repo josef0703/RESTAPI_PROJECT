@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>상세확인</title>
+</head>
+<body>
+
+<input readonly th:value="${findbynum.b_title}"><br>
+<textarea readonly th:text="${findbynum.b_content}"></textarea>
+
+<button th:onclick="|location.href='@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}'|">삭제하기</button>
+
+
+</body>
+</html>

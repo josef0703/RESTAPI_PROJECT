@@ -4,6 +4,7 @@ import com.example.gradletest3.dao.user.UserDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface BoardDAO {
     @Select("select * from board_table where b_del_yn='N' and b_num=#{b_num}")
     public BoardDTO boardone(int b_num);
 
+    @Update("update board_table set b_title=#{b_title}, b_content=#{b_content} where b_num=#{b_num}")
+    public int boardupdate(int b_num);
 }

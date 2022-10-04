@@ -80,13 +80,19 @@ public class BoardController {
         BoardDTO result = boardService.boardone(b_num);
         System.out.println(result.getB_num());
 
-//        model.addAttribute("findbynum", boardService.boardone());
+
+        model.addAttribute("findbynum", boardService.boardone(b_num));
         return "/board/boardone";
     }
 
-    @GetMapping("/boardupdate/")
-    public String boardUpdate() {
-        return null;
+    @GetMapping("/boardupdate/{b_num}")
+    public String boardUpdate(@PathVariable("b_num") int b_num, Model model) {
+        return "/board/boardupdate";
     }
+    @PostMapping("/boardu")
 
+    @GetMapping("/boarddelete/{b_num}")
+    public String boarddelete(@PathVariable("b_num") int b_num, Model model) {
+        return "/board/boarddelete";
+    }
 }
