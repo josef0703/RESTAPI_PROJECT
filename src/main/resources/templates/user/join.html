@@ -6,11 +6,11 @@
 </head>
 <body>
 
-<form th:action="@{/join/}" method="post">
+<form th:action="@{/user/join/}" method="post">
     <span th:text="이름"></span> <input th:name="name"> <br>
     <span th:text="아이디"></span> <input th:name="userid"> <br>
-    <span th:text="비밀번호"></span> <input th:name="userpasswd"> <br>
-    <span th:text="이메일"></span> <input th:name="useremail"> <br>
+    <span th:text="비밀번호"></span> <input type="password" th:name="userpasswd"> <br>
+    <span th:text="이메일"></span> <input type="email" th:name="useremail"> <br>
 
     <input type="submit">
 </form>

@@ -23,4 +23,8 @@ public class BoardService {
     public int boardwrite(BoardDTO boardDTO) {
         return boardDAO.boardwrite(boardDTO);
     }
+
+    public BoardDTO boardone(int b_num) {
+        return boardDAO.boardone(b_num);
+    }
 }

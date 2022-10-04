@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -23,8 +25,8 @@ public class UserController {
     }
 
 
-
     //회원가입 페이지
+
     @GetMapping("/join")
     public String joinPage() {
         return "/user/join";
@@ -55,13 +57,15 @@ public class UserController {
 
         UserDTO result = userService.login(userDTO);
 
+
         if (result.getUserid() != null) {
             HttpSession session = req.getSession(true);
             session.setAttribute("user", result.getUserid());
-            returnURL = "redirect:/boardlist";
+            System.out.println("로그인 성공");
+            returnURL = "redirect:/board/boardlist";
         } else {
-
-            returnURL = "redirect:/login";
+            System.out.println("로그인 실패");
+            returnURL = "/user/login";
         }
 
 
@@ -71,7 +75,4 @@ public class UserController {
 
         return returnURL;
     }
-
-
-
 }

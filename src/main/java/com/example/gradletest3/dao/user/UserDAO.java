@@ -10,11 +10,14 @@ import java.util.List;
 @Mapper
 public interface UserDAO {
 
-    @Select("select * from user_table")
+
+
+    @Select("select * from user_table where userrole='user'")
     public List<UserDTO> selectAll();
 
-    @Insert("insert into user_table values(user_table_seq.nextval,#{name},#{userid},#{userpasswd},#{useremail})")
+    @Insert("insert into user_table (usernum,name,userid,userpasswd,useremail) values(user_table_seq.nextval,#{name},#{userid},#{userpasswd},#{useremail})")
     public int join(UserDTO userDTO);
+
 
     @Select("select userid,userpasswd from user_table where userid=#{userid} and userpasswd=#{userpasswd}")
     public UserDTO login(UserDTO userDTO);

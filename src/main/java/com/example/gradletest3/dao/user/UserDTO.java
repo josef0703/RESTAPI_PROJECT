@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
-//@Setter
+@Setter
 @NoArgsConstructor
 public class UserDTO {
 
@@ -29,12 +29,15 @@ public class UserDTO {
 
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String useremail;
-    @Builder
-    public UserDTO(int usernum, String name, String userpasswd, String userid, String useremail) {
-        this.usernum = usernum;
-        this.name = name;
-        this.userpasswd = userpasswd;
-        this.userid = userid;
-        this.useremail = useremail;
-    }
+
+    private String userrole;
+
+//    @Builder
+//    public UserDTO(int usernum, String name, String userpasswd, String userid, String useremail) {
+//        this.usernum = usernum;
+//        this.name = name;
+//        this.userpasswd = userpasswd;
+//        this.userid = userid;
+//        this.useremail = useremail;
+//    }
 }

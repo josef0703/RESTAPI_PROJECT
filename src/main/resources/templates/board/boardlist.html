@@ -6,8 +6,12 @@
 </head>
 <body>
 게시판
+<header>
+세션 아이디 : <span th:text="${user}"></span><br>
+<a th:href="@{/user/logout}">로그아웃</a>
+</header>
 
-세션 아이디 : <span th:text="${user}"></span>
+<a th:href="@{/}"><td>테스트</td></a>
 
 <table th:border="1">
     <tr>
@@ -19,14 +23,13 @@
         <th th:text="조회수"></th>
     </tr>
     <tr th:each="board : ${boardlist}">
-        <td th:text="${board.b_num}"></td>
+        <td><a th:text="${board.b_num}" th:href="@{/board/boardone/{b_num}(b_num=${board.b_num})}"></a></td>
         <td th:text="${board.b_writer}"></td>
         <td th:text="${board.b_title}"></td>
         <td th:text="${board.b_content}"></td>
 <!--        <td th:text="${board.b_regdat}"></td>-->
         <td th:text="${#dates.format(board.b_regdat,'yy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${board.b_hit}"></td>
-
     </tr>
 </table>
 

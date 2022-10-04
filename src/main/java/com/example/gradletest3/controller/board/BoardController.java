@@ -4,14 +4,14 @@ import com.example.gradletest3.dao.board.BoardDTO;
 import com.example.gradletest3.service.board.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("board")
 public class BoardController {
 
     private final BoardService boardService;
@@ -23,21 +23,36 @@ public class BoardController {
     // 게시판 리스트
     @GetMapping("/boardlist")
     public String boardList(Model model, HttpSession session) {
+        String returnURL = "";
         System.out.println("들어옴");
         Object user = session.getAttribute("user");
-        model.addAttribute("boardlist", boardService.boardList());
-        model.addAttribute("user", user);
+        System.out.println("user =" + user);
+        if (user == null) {
+            returnURL = "/user/login";
+        } else {
+            model.addAttribute("boardlist", boardService.boardList());
+            model.addAttribute("user", user);
+            returnURL = "/board/boardlist";
+        }
 
-        return "/board/boardlist";
+
+        return returnURL;
     }
 
     // 게시판 작성페이지
     @GetMapping("/boardwrite")
     public String boardwrite(HttpSession session, Model model) {
+        String returnURL = "";
         Object user = session.getAttribute("user");
-        model.addAttribute("user", user);
+        if (user == null) {
+            returnURL = "/user/login";
+        } else {
+            model.addAttribute("user", user);
+            returnURL = "/board/boardwrite";
+        }
 
-        return "/board/boardwrite";
+
+        return returnURL;
     }
 
 
@@ -50,12 +65,28 @@ public class BoardController {
 
         if (result == 1) {
             System.out.println("성공");
-            returnURL = "/board/boardlist";
+            returnURL = "redirect:/board/boardlist";
         } else {
             System.out.println("실패");
-            returnURL = "/board/boardwrite";
+            returnURL = "redirect:/board/boardwrite";
         }
 
         return returnURL;
     }
+
+    @GetMapping("/boardone/{b_num}")
+    public String boardone(@PathVariable("b_num") int b_num, Model model) {
+
+        BoardDTO result = boardService.boardone(b_num);
+        System.out.println(result.getB_num());
+
+//        model.addAttribute("findbynum", boardService.boardone());
+        return "/board/boardone";
+    }
+
+    @GetMapping("/boardupdate/")
+    public String boardUpdate() {
+        return null;
+    }
+
 }

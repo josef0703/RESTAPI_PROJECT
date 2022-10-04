@@ -1,5 +1,6 @@
 package com.example.gradletest3.dao.board;
 
+import com.example.gradletest3.dao.user.UserDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -16,4 +17,8 @@ public interface BoardDAO {
 
     @Insert("insert into board_table (b_num,b_writer,b_title,b_content,b_regdat) values (board_table_seq.nextval,#{b_writer},#{b_title},#{b_content},sysdate)")
     public int boardwrite(BoardDTO boardDTO);
+
+    @Select("select * from board_table where b_del_yn='N' and b_num=#{b_num}")
+    public BoardDTO boardone(int b_num);
+
 }
