@@ -2,15 +2,18 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>상세확인</title>
+  <title>수정페이지</title>
 </head>
 <body>
-<!--<form th:action="@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}" method="post">-->
+<form th:action="@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}" method="post">
+
 
 <input th:name="b_title" th:value="${findbynum.b_title}"><br>
-<textarea th:name="b_content" th:text="${findbynum.b_content}"></textarea>
-<!--</form>-->
-<button th:onclick="|location.href='@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}'|">수정하기</button>
+<textarea th:name="b_content" th:text="${findbynum.b_content}" th:value="${findbynum.b_content}"></textarea>
+  <input type="submit">
+</form>
+
+<!--<button th:onclick="|location.href='@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}'|">수정하기</button>-->
 
 
 </body>

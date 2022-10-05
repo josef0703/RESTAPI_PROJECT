@@ -78,7 +78,7 @@ public class BoardController {
     public String boardone(@PathVariable("b_num") int b_num, Model model) {
 
         BoardDTO result = boardService.boardone(b_num);
-        System.out.println(result.getB_num());
+//        System.out.println(result.getB_num());
 
 
         model.addAttribute("findbynum", boardService.boardone(b_num));
@@ -87,12 +87,45 @@ public class BoardController {
 
     @GetMapping("/boardupdate/{b_num}")
     public String boardUpdate(@PathVariable("b_num") int b_num, Model model) {
+        model.addAttribute("findbynum", boardService.boardone(b_num));
         return "/board/boardupdate";
     }
-    @PostMapping("/boardu")
+
+    @PostMapping("/boardupdate/{b_num}")
+    public String boardUpdateOk(BoardDTO boardDTO, Model model) {
+
+        String returnURL = "";
+//        System.out.println(boardDTO.getB_title());
+//        System.out.println(boardDTO.getB_content());
+        int result = boardService.boardupdate(boardDTO);
+
+        if (result == 1) {
+            returnURL = "redirect:/board/boardone/" + boardDTO.getB_num();
+        } else {
+            returnURL = "redirect:/board/boardupdate/" + boardDTO.getB_num();
+        }
+        return returnURL;
+    }
 
     @GetMapping("/boarddelete/{b_num}")
     public String boarddelete(@PathVariable("b_num") int b_num, Model model) {
+        model.addAttribute("findbynum", boardService.boardone(b_num));
         return "/board/boarddelete";
     }
+
+    @PostMapping("/boarddelete/{b_num}")
+    public String boarddeleteOk(@PathVariable("b_num") int b_num, Model model) {
+        String returnURL = "";
+        int result = boardService.boarddelete(b_num);
+        System.out.println("result 값 : " + result);
+
+        if (result == 1) {
+            returnURL = "redirect:/board/boardlist";
+        } else {
+            returnURL = "redirect:/board/boardone/" + b_num;
+        }
+        return returnURL;
+    }
+
+
 }

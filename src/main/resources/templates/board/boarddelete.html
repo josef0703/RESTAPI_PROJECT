@@ -5,11 +5,12 @@
   <title>상세확인</title>
 </head>
 <body>
-
+<form th:action="@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}" method="post">
 <input readonly th:value="${findbynum.b_title}"><br>
 <textarea readonly th:text="${findbynum.b_content}"></textarea>
-
-<button th:onclick="|location.href='@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}'|">삭제하기</button>
+<input type="submit">
+</form>
+<!--<button th:onclick="|location.href='@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}'|">삭제하기</button>-->
 
 
 </body>

@@ -1,27 +1,32 @@
 package com.example.gradletest3.controller.user;
 
+import com.example.gradletest3.dao.user.EmailAuthRequestDto;
 import com.example.gradletest3.dao.user.UserDTO;
+import com.example.gradletest3.service.email.EmailService;
 import com.example.gradletest3.service.user.UserService;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("user")
 public class UserController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
-
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EmailService emailService) {
         this.userService = userService;
-
+        this.emailService = emailService;
     }
 
 
@@ -75,4 +80,12 @@ public class UserController {
 
         return returnURL;
     }
+
+    @PostMapping("/mainConfirm")
+    public String mailConfirm(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
+        String authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
+        return authCode;
+    }
+
+
 }
