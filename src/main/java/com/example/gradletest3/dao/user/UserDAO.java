@@ -19,7 +19,7 @@ public interface UserDAO {
     public int join(UserDTO userDTO);
 
 
-    @Select("select userid,userpasswd from user_table where userid=#{userid} and userpasswd=#{userpasswd}")
+    @Select("select userid,userpasswd from user_table where userid=#{userid}")
     public UserDTO login(UserDTO userDTO);
 
 

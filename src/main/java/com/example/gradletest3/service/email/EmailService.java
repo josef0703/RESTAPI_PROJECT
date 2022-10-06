@@ -70,9 +70,9 @@ public class EmailService {
     }
 
     public String setContext(String code) {
-        Context context = new Context();
-        context.setVariable("code", code);
-        return templateEngine.process("mail", context);
-        //mail.html
+//        Context context = new Context();
+//        context.setVariable("code", code);
+        return code;
+//        //mail.html
     }
 }
