@@ -15,7 +15,7 @@ public interface UserDAO {
     @Select("select * from user_table where userrole='user'")
     public List<UserDTO> selectAll();
 
-    @Insert("insert into user_table (usernum,name,userid,userpasswd,useremail) values(user_table_seq.nextval,#{name},#{userid},#{userpasswd},#{useremail})")
+    @Insert("insert into user_table (usernum,name,userid,userpasswd,useremail,user_regdat) values(user_table_seq.nextval,#{name},#{userid},#{userpasswd},#{useremail},sysdate)")
     public int join(UserDTO userDTO);
 
 

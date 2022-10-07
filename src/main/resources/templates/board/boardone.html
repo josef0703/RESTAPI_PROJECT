@@ -5,9 +5,11 @@
     <title>상세확인</title>
 </head>
 <body>
-
+<!--<input type="text" th:name="b_num" th:value="${findbynum.b_num}">-->
 <input th:value="${findbynum.b_title}"><br>
-<textarea th:text="${findbynum.b_content}"></textarea>
+<textarea th:text="${findbynum.b_content}"></textarea><br>
+<span th:text="${findbynum.b_hit}"></span><br>
+
 
 <button th:onclick="|location.href='@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}'|">수정하기</button>
 <button th:onclick="|location.href='@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}'|">삭제하기</button>

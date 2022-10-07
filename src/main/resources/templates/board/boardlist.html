@@ -23,7 +23,8 @@
         <th th:text="조회수"></th>
     </tr>
     <tr th:each="board : ${boardlist}">
-        <td><a th:text="${board.b_num}" th:href="@{/board/boardone/{b_num}(b_num=${board.b_num})}"></a></td>
+<!--        <td><a th:text="${board.b_num}" th:href="@{/board/boardone?{b_num}(b_num=${board.b_num})}"></a></td>-->
+        <td><a th:text="${board.b_num}" th:href="@{/board/boardone(b_num=${board.b_num})}"></a></td>
         <td th:text="${board.b_writer}"></td>
         <td th:text="${board.b_title}"></td>
         <td th:text="${board.b_content}"></td>

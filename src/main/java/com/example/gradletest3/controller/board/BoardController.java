@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.jws.WebParam;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -27,13 +29,13 @@ public class BoardController {
         System.out.println("들어옴");
         Object user = session.getAttribute("user");
         System.out.println("user =" + user);
-        if (user == null) {
-            returnURL = "/user/login";
-        } else {
+//        if (user == null) {
+//            returnURL = "/user/login";
+//        } else {
             model.addAttribute("boardlist", boardService.boardList());
             model.addAttribute("user", user);
             returnURL = "/board/boardlist";
-        }
+//        }
 
 
         return returnURL;
@@ -74,14 +76,44 @@ public class BoardController {
         return returnURL;
     }
 
-    @GetMapping("/boardone/{b_num}")
-    public String boardone(@PathVariable("b_num") int b_num, Model model) {
+    @GetMapping("/boardone")
+    public String boardone(@RequestParam("b_num") int b_num ,Model model, HttpServletRequest req, HttpServletResponse res) {
 
         BoardDTO result = boardService.boardone(b_num);
 //        System.out.println(result.getB_num());
 
-
         model.addAttribute("findbynum", boardService.boardone(b_num));
+//        System.out.println(req.getParameter("num"));
+
+        //조회수 로직
+        Cookie[] cookies = req.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println("cookie.getname" + cookie.getName());
+                System.out.println("cookie.getvalue" + cookie.getValue());
+
+                System.out.println("parameter 값 : "+req.getParameter("b_num"));
+
+                //세션 value값에 b_num값이 있으면 조회수 안올라감.
+                //세션을 없애고 쿠키로 로그인 확인해야하는지 고민 필요
+                if (!cookie.getValue().contains(req.getParameter("b_num"))) {
+                    cookie.setValue(cookie.getValue() + "_" + req.getParameter("b_num"));
+                    cookie.setMaxAge(60 * 60 * 2);
+                    res.addCookie(cookie);
+                    boardService.boardViewCount(b_num);
+                    System.out.println("변경 후 쿠키값 : "+cookie.getValue());
+
+                }
+            }
+        } else {
+            Cookie newCookie = new Cookie("visit_cookie", req.getParameter("b_num"));
+            newCookie.setMaxAge(60 * 60 * 2);
+            res.addCookie(newCookie);
+            boardService.boardViewCount(b_num);
+        }
+
+
         return "/board/boardone";
     }
 

@@ -24,4 +24,7 @@ public interface BoardDAO {
 
     @Update("update board_table set b_del_yn='Y' where b_num=#{b_num}")
     public int boarddelete(int b_num);
+
+    @Update("update board_table set b_hit=b_hit+1 where b_num=#{b_num}")
+    public int boardViewCount(int b_num);
 }

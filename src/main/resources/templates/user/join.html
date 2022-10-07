@@ -5,7 +5,7 @@
     <title>유저 정보</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!--    <script src="../../static/js/join.js"></script>-->
-<!--    <script src="/js/join.js"></script>-->
+    <script src="/js/join.js"></script>
 <!--    <script src="${path}/resources/js/join.js"></script>-->
 
 </head>
@@ -16,7 +16,7 @@
     <span th:text="이름"></span> <input th:name="name" th:id="name"> <br>
     <span th:text="아이디"></span> <input th:name="userid" th:id="id"> <br>
     <span th:text="비밀번호"></span> <input type="password" th:name="userpasswd" th:id="passwd"> <br>
-    <span th:text="이메일"></span> <input type="email" id="email" th:name="useremail">  <button type="button" id="btn_email">인증받기</button><br>
+    <span th:text="이메일"></span> <input type="email" th:id="email" th:name="useremail">  <button type="button" id="btn_email">인증받기</button><br>
     <input id="email_chk" type="hidden">
     <button type="button" id="btn_mail_chk" >인증 확인</button>
     <input id="join_chk" type="submit">

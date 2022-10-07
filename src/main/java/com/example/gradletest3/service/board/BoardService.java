@@ -35,4 +35,7 @@ public class BoardService {
     public int boarddelete(int b_num) {
         return boardDAO.boarddelete(b_num);
     }
+    public int boardViewCount(int b_num) {
+        return boardDAO.boardViewCount(b_num);
+    }
 }
