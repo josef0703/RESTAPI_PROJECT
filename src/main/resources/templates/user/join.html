@@ -4,14 +4,35 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>유저 정보</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <!--    <script src="../../static/js/join.js"></script>-->
     <script src="/js/join.js"></script>
 <!--    <script src="${path}/resources/js/join.js"></script>-->
 
+    <!-- 아임포트 본인인증  -->
+
 </head>
 
 <body>
-
+<script type="text/javascript">
+    var IMP = window.IMP; // 생략가능
+    IMP.init('imp65452177'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+    IMP.certification({
+        /* ...중략... */
+    }, function (rsp) { // callback
+        if (rsp.success) { // 인증 성공 시
+            // jQuery로 HTTP 요청
+            jQuery.ajax({
+                url: "http://localhost:8080/user/join", // 예: https://www.myservice.com/certifications
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                data: { imp_uid: rsp.imp_uid }
+            });
+        } else {
+            alert("인증에 실패하였습니다. 에러 내용: " +  rsp.error_msg);
+        }
+    });
+</script>
 <form th:action="@{/user/join/}" method="post">
     <span th:text="이름"></span> <input th:name="name" th:id="name"> <br>
     <span th:text="아이디"></span> <input th:name="userid" th:id="id"> <br>

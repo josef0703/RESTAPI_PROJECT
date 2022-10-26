@@ -64,8 +64,8 @@ public class UserController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if(encoder.matches(passwd,result.getUserpasswd())){
-            HttpSession session = req.getSession(true);
-            session.setAttribute("user", result.getUserid());
+//            HttpSession session = req.getSession(true);
+//            session.setAttribute("user", result.getUserid());
             System.out.println("로그인 성공");
             returnURL = "redirect:/board/boardlist";
         }else {

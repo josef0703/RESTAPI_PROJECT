@@ -1,6 +1,7 @@
 package com.example.gradletest3.controller.board;
 
 import com.example.gradletest3.dao.board.BoardDTO;
+import com.example.gradletest3.dao.search.SearchDTO;
 import com.example.gradletest3.service.board.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ public class BoardController {
 
     // 게시판 리스트
     @GetMapping("/boardlist")
-    public String boardList(Model model, HttpSession session) {
+    public String boardList(Model model, HttpSession session, @ModelAttribute SearchDTO searchDTO) {
+
         String returnURL = "";
         System.out.println("들어옴");
         Object user = session.getAttribute("user");
@@ -32,9 +34,9 @@ public class BoardController {
 //        if (user == null) {
 //            returnURL = "/user/login";
 //        } else {
-            model.addAttribute("boardlist", boardService.boardList());
-            model.addAttribute("user", user);
-            returnURL = "/board/boardlist";
+        model.addAttribute("boardlist", boardService.boardList());
+        model.addAttribute("user", user);
+        returnURL = "/board/boardlist";
 //        }
 
 
@@ -46,12 +48,12 @@ public class BoardController {
     public String boardwrite(HttpSession session, Model model) {
         String returnURL = "";
         Object user = session.getAttribute("user");
-        if (user == null) {
-            returnURL = "/user/login";
-        } else {
+//        if (user == null) {
+//            returnURL = "/user/login";
+//        } else {
             model.addAttribute("user", user);
             returnURL = "/board/boardwrite";
-        }
+//        }
 
 
         return returnURL;
@@ -80,38 +82,41 @@ public class BoardController {
     public String boardone(@RequestParam("b_num") int b_num ,Model model, HttpServletRequest req, HttpServletResponse res) {
 
         BoardDTO result = boardService.boardone(b_num);
+        boardService.boardViewCount(b_num);
 //        System.out.println(result.getB_num());
 
         model.addAttribute("findbynum", boardService.boardone(b_num));
+
 //        System.out.println(req.getParameter("num"));
 
         //조회수 로직
-        Cookie[] cookies = req.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                System.out.println("cookie.getname" + cookie.getName());
-                System.out.println("cookie.getvalue" + cookie.getValue());
-
-                System.out.println("parameter 값 : "+req.getParameter("b_num"));
-
-                //세션 value값에 b_num값이 있으면 조회수 안올라감.
-                //세션을 없애고 쿠키로 로그인 확인해야하는지 고민 필요
-                if (!cookie.getValue().contains(req.getParameter("b_num"))) {
-                    cookie.setValue(cookie.getValue() + "_" + req.getParameter("b_num"));
-                    cookie.setMaxAge(60 * 60 * 2);
-                    res.addCookie(cookie);
-                    boardService.boardViewCount(b_num);
-                    System.out.println("변경 후 쿠키값 : "+cookie.getValue());
-
-                }
-            }
-        } else {
-            Cookie newCookie = new Cookie("visit_cookie", req.getParameter("b_num"));
-            newCookie.setMaxAge(60 * 60 * 2);
-            res.addCookie(newCookie);
-            boardService.boardViewCount(b_num);
-        }
+//        Cookie[] cookies = req.getCookies();
+//
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                System.out.println("cookie.getname" + cookie.getName());
+//                System.out.println("cookie.getvalue" + cookie.getValue());
+//
+//                System.out.println("parameter 값 : "+req.getParameter("b_num"));
+//
+//
+//                //세션 value값에 b_num값이 있으면 조회수 안올라감.
+//                //세션을 없애고 쿠키로 로그인 확인해야하는지 고민 필요
+//                if (!cookie.getValue().contains(req.getParameter("b_num"))) {
+//                    cookie.setValue(cookie.getValue() + "_" + req.getParameter("b_num"));
+//                    cookie.setMaxAge(60 * 60 * 24);
+//                    res.addCookie(cookie);
+//                    boardService.boardViewCount(b_num);
+//                    System.out.println("변경 후 쿠키값 : "+cookie.getValue());
+//
+//                }
+//            }
+//        } else {
+//            Cookie newCookie = new Cookie("visit_cookie", req.getParameter("b_num"));
+//            newCookie.setMaxAge(60 * 60 * 2);
+//            res.addCookie(newCookie);
+//            boardService.boardViewCount(b_num);
+//        }
 
 
         return "/board/boardone";
@@ -130,9 +135,11 @@ public class BoardController {
 //        System.out.println(boardDTO.getB_title());
 //        System.out.println(boardDTO.getB_content());
         int result = boardService.boardupdate(boardDTO);
+        System.out.println(boardDTO.getB_num());
+        System.out.println("수정 값 : " + result);
 
         if (result == 1) {
-            returnURL = "redirect:/board/boardone/" + boardDTO.getB_num();
+            returnURL = "redirect:/board/boardwrite";
         } else {
             returnURL = "redirect:/board/boardupdate/" + boardDTO.getB_num();
         }
