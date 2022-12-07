@@ -34,6 +34,11 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.20'
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.seleniumhq.selenium:selenium-java:4.1.2'
+    //파일업로드
+    implementation 'commons-io:commons-io:2.11.0'    /* Apache commons-io */
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4' /* Apache Commons FileUpload */
+    //아임포트 결과 JSON
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
 
 }
 

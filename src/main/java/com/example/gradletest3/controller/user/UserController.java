@@ -4,6 +4,7 @@ import com.example.gradletest3.dao.user.EmailAuthRequestDto;
 import com.example.gradletest3.dao.user.UserDTO;
 import com.example.gradletest3.service.email.EmailService;
 import com.example.gradletest3.service.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping("user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -40,7 +42,6 @@ public class UserController {
     //회원가입 POST
     @PostMapping("/join")
     public String join(@Valid UserDTO userDTO) {
-
         int result = userService.join(userDTO);
 
         System.out.println(result);
@@ -56,16 +57,20 @@ public class UserController {
 
     //로그인 POST
     @PostMapping("/login")
-    public String login(UserDTO userDTO, Model model, HttpServletRequest req, @RequestParam("userpasswd") String userpasswd) {
+    public String login(UserDTO userDTO, Model model, HttpServletRequest req
+            , @RequestParam("userpasswd") String userpasswd)
+            {
 
         String returnURL = "";
-        String passwd = userpasswd;
+                String passwd = userDTO.getUserpasswd();
+        log.info(passwd);
+
         UserDTO result = userService.login(userDTO);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if(encoder.matches(passwd,result.getUserpasswd())){
-//            HttpSession session = req.getSession(true);
-//            session.setAttribute("user", result.getUserid());
+            HttpSession session = req.getSession(true);
+            session.setAttribute("user", result.getUserid());
             System.out.println("로그인 성공");
             returnURL = "redirect:/board/boardlist";
         }else {
@@ -74,6 +79,8 @@ public class UserController {
         }
 
         model.addAttribute("userInfo", result.getUserid());
+
+
 
 
         return returnURL;

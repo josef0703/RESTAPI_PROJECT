@@ -7,8 +7,14 @@
 <body>
 게시판
 <header>
-세션 아이디 : <span th:text="${user}"></span><br>
-<a th:href="@{/user/logout}">로그아웃</a>
+    <div th:if="${not #strings.isEmpty(user)}">
+        세션 아이디 : <span th:text="${user}"></span><br>
+        <a th:href="@{/user/logout}">로그아웃</a>
+    </div>
+    <div th:if="${#strings.isEmpty(user)}">
+        세션 아이디 : <span>비회원</span>
+
+    </div>
 </header>
 
 <a th:href="@{/}"><td>테스트</td></a>
@@ -23,8 +29,8 @@
         <th th:text="조회수"></th>
     </tr>
     <tr th:each="board : ${boardlist}">
-<!--        <td><a th:text="${board.b_num}" th:href="@{/board/boardone?{b_num}(b_num=${board.b_num})}"></a></td>-->
         <td><a th:text="${board.b_num}" th:href="@{/board/boardone(b_num=${board.b_num})}"></a></td>
+<!--        <td><a th:text="${board.b_num}" th:href="@{/board/boardone(b_num=${board.b_num})}"></a></td>-->
         <td th:text="${board.b_writer}"></td>
         <td th:text="${board.b_title}"></td>
         <td th:text="${board.b_content}"></td>
@@ -33,6 +39,33 @@
         <td th:text="${board.b_hit}"></td>
     </tr>
 </table>
+
+
+
+<!--<div class="page-num"-->
+<!--     th:with="start=${(pages.number/maxPage)*maxPage + 1},-->
+<!--                  end=(${(pages.totalPages == 0) ? 1 : (start + (maxPage - 1) < pages.totalPages ? start + (maxPage - 1) : pages.totalPages)})" >-->
+<!--    <ul>-->
+<!--        <li th:if="${start > 1}">-->
+<!--            <a th:href="@{/board/boardlist?(page=0)}" th:text="'<<'"></a></li>-->
+<!--            <span th:text="${pages.}"></span>-->
+<!--        </li>-->
+
+<!--        <li th:if="${start > 1}">-->
+<!--            <a th:href="@{/board/boardlist?(page=${start - maxPage})}" th:text="'<'"></a>-->
+<!--        </li>-->
+
+<!--        <li th:each="page: ${#numbers.sequence(start, end)}">-->
+<!--            <a th:href="@{/board/boardlist?(page=${page-1})}" th:text="${page}"></a></li>-->
+<!--        </li>-->
+<!--        <li th:if="${end < pages.totalPages}">-->
+<!--            <a th:href="@{/board/boardlist?(page=${start + maxPage})}" th:text="'>'"></a>-->
+<!--        </li>-->
+<!--        <li th:if="${end < pages.totalPages}">-->
+<!--            <a th:href="@{/board/boardlist?(page=${pages.totalPages-1})}" th:text="'>>'"></a></li>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
 
 
 </body>

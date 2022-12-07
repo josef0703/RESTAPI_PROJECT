@@ -3,16 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>상세확인</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/comment/comment.js"></script>
 </head>
 <body>
 <!--<input type="text" th:name="b_num" th:value="${findbynum.b_num}">-->
 <input th:value="${findbynum.b_title}"><br>
 <textarea th:text="${findbynum.b_content}"></textarea><br>
 <span th:text="${findbynum.b_hit}"></span><br>
-
-
+<!--게시판 번호 : <span th:text="${findbynum.b_num}"></span>-->
+<div th:if="${not #strings.isEmpty(user)}">
 <button th:onclick="|location.href='@{/board/boardupdate/{b_num}(b_num=${findbynum.b_num})}'|">수정하기</button>
 <button th:onclick="|location.href='@{/board/boarddelete/{b_num}(b_num=${findbynum.b_num})}'|">삭제하기</button>
+
+    <div id="file_upload">
+        <form th:action="@{/board/upload_ok(b_num=${findbynum.b_num})}" method="post" enctype="multipart/form-data">
+            파일 선택 : <input type="file" name="file">
+            <input type="submit" value="전송">
+        </form>
+
+
+        <!--    <div>-->
+        <!--        <table th:border="1">-->
+        <!--            <tr>-->
+        <!--               <th>파일명</th>-->
+        <!--            </tr>-->
+        <!--            <tr th:each="fileList : ${fileList}">-->
+        <!--                <td><a th:text="${fileList.org_file_name}" th:href="@{/board/download(f_num=${fileList.f_num})}"></a></td>-->
+        <!--            </tr>-->
+
+        <!--        </table>-->
+        <!--    </div>-->
+        <div th:each="fileList :${fileList}">
+            <a th:text="${fileList.org_file_name}" th:href="@{/board/download(f_num=${fileList.f_num})}"></a>
+            <input type="button" th:onclick="|location.href='@{/board/fileDelete(f_num=${fileList.f_num})}'|" th:value="파일삭제">
+
+        </div>
+
+    </div>
+</div>
+
+<br>
+<!--<input id="user" name="r_writer" th:value="${user}">-->
+
+<div th:if="${#strings.isEmpty(user)}">
+    <!--    <span th:text="${#sthings.isEmpty(user)}"></span>-->
+    로그인해야 댓글 작성 가능
+</div>
+
+<div th:if="${not #strings.isEmpty(user)}">
+    <!--    <span th:text="${not #sthings.isEmpty(user)}"></span>-->
+    <sthong>댓글</sthong>
+    <hr>
+    <form th:action="@{/board/comment/{b_num}(b_num=${findbynum.b_num})}" method="post">
+        <input id="boardnum" th:value="${findbynum.b_num}" type="hidden">
+        <input id="com_content" style="width:300px;height:200px;" name="r_content"><br>
+        <button type="submit" id="insert_comment">댓글 달기</button>
+    </form>
+</div>
+
+
+
+<hr>
+<div id="comment">
+    <strong>댓글 개수</strong> <span th:text="${count}"></span><br>
+    <table th:border="1">
+        <tr>
+            <th>작성자</th>
+            <th>댓글 내용</th>
+            <th>댓글 작성일</th>
+        </tr>
+        <tr th:each="commentlist : ${commentList}">
+            <td th:text="${commentlist.r_writer}"></td>
+            <td th:text="${commentlist.r_content}"></td>
+            <td th:text="${#dates.format(commentlist.r_regdat,'yy/MM/dd HH:mm')}"></td>
+        </tr>
+
+    </table>
+<!--        <div>댓글 테스트</div>-->
+<!--        <div>댓글 테스트</div>-->
+<!--        <div>댓글 테스트</div>-->
+
+
+</div>
+
 
 </body>
 </html>

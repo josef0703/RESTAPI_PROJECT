@@ -5,15 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class UserDTO implements UserDetails {
 
     private int usernum;
 
@@ -31,6 +37,49 @@ public class UserDTO {
     private String useremail;
 
     private String userrole;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+
+        if (this.userrole.equals("admin")) {
+            auth.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else {
+            auth.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
+        return auth;
+    }
+
+    @Override
+    public String getPassword() {
+        return userpasswd;
+    }
+
+    @Override
+    public String getUsername() {
+        return userid;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 //    @Builder
 //    public UserDTO(int usernum, String name, String userpasswd, String userid, String useremail) {

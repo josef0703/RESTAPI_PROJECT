@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+</head>
+<body>
+
+<button onclick="requestPay()">결제하기</button>
+...
+<script>
+  function requestPay() {
+    var IMP = window.IMP; // 생략 가능
+    IMP.init("imp65452177"); //
+    //   IMP.init("imp17736453"); //
+    // IMP.request_pay(param, callback) 결제창 호출
+    IMP.request_pay({ // param
+      pg: "kakao",
+      // pay_method: "card",
+      merchant_uid: "movie_"+new Date().getTime(),
+      name: "영화",
+      amount: 64900,
+      // buyer_email: "gildong@gmail.com",
+      // buyer_name: "홍길동",
+      // buyer_tel: "010-4242-4242",
+      // buyer_addr: "서울특별시 강남구 신사동",
+      // buyer_postcode: "01181"
+    }, function (rsp) { // callback
+      if (rsp.success) {
+        var msg = '결제 성공';
+        // 결제 성공 시 로직,
+
+      } else {
+        var msg = '결제 실패';
+        msg += rsp.error_msg;
+        // 결제 실패 시 로직,
+
+      }
+        alert(msg);
+    });
+  }
+</script>
+
+</body>
+</html>
