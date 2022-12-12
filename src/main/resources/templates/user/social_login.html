@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Insert title here</title>
+</head>
+<body>
+<!--<a class="p-2" th:href="@{https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EgmSzlLPq2t3fwcT0yRm&(redirect_uri=${redirectURI})&(state=${state})}>-->
+<!--<a class="p-2" th:href="@{https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EgmSzlLPq2t3fwcT0yRm&(redirect_uri=${redirectURI})&(state=${state})}">-->
+<a class="p-2" href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=EgmSzlLPq2t3fwcT0yRm&redirect_uri=http://localhost:8081/user/naver&state=state">
+  네이버
+</a>
+<a class="p-2" href="http://localhost:8080/login/oauth2/code/google">
+  구글
+</a>
+<a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=6c751e5e4ce3f689acb1ae4884eec4d0&redirect_uri=http://localhost:8081/user/kakao&response_type=code">
+  카카오
+</a>
+
+</body>
+</html>

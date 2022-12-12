@@ -24,6 +24,9 @@ public interface UserDAO {
 //    public UserDTO login(UserDTO userDTO);
     public UserDTO login(UserDTO userDTO);
 
+    //카카오 회원가입
+//    @Insert()
+
 
 
 }

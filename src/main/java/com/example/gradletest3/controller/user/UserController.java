@@ -4,6 +4,7 @@ import com.example.gradletest3.dao.user.EmailAuthRequestDto;
 import com.example.gradletest3.dao.user.UserDTO;
 import com.example.gradletest3.service.email.EmailService;
 import com.example.gradletest3.service.user.KakaoService;
+import com.example.gradletest3.service.user.NaverService;
 import com.example.gradletest3.service.user.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.Map;
 
 @Controller
@@ -28,6 +32,7 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final KakaoService kakaoService;
+    private final NaverService naverService;
 
 
     //회원가입 페이지
@@ -94,7 +99,7 @@ public class UserController {
 //        log.info("token : " + authrizationCode);
 //        log.info("token : " + code);
 
-        return "/user/login_kakao";
+        return "/user/social_login";
     }
 
     @GetMapping("/kakao")
@@ -105,15 +110,37 @@ public class UserController {
         String accessToken = kakaoService.getKakaoAccessToken(code);
         Map<String,Object> result = kakaoService.getUserInfo(accessToken);
 
-        log.info((String) result.get("email"));
-        log.info((String) result.get("id"));
-        log.info((String) result.get("nickname"));
+        log.info(String.valueOf(result.get("email")));
+        log.info(String.valueOf(result.get("id")));
+        log.info(String.valueOf(result.get("nickname")));
 
         return "redirect:/";
     }
 
-    @GetMapping("/test")
-    public String getTest() {
-        return "test";
+    @GetMapping("/naver1")
+    public String login_naver(Model model) throws UnsupportedEncodingException {
+        String redirectURI = URLEncoder.encode("http://localhost:8081/user/naver", "UTF-8");
+        SecureRandom random = new SecureRandom();
+        String state = new BigInteger(130, random).toString();
+        model.addAttribute("redirectURI", redirectURI);
+        model.addAttribute("state", state);
+
+        log.info("redirecturi = " + redirectURI);
+        log.info("state = " + state);
+
+        return "/user/social_login";
+
+    }
+
+    @GetMapping("/naver")
+    @ResponseBody
+    public String getNaverToken(@RequestParam String code) {
+        log.info("code : " + code);
+        String naverAccessToken = naverService.getNaverAccessToken(code);
+        log.info("naverAccessToken : " + naverAccessToken);
+        Map<String, Object> result = naverService.getNaverInfo(naverAccessToken);
+        log.info("id : " + result.get("id"));
+        log.info("email : " + result.get("email"));
+        return "redirect:/";
     }
 }

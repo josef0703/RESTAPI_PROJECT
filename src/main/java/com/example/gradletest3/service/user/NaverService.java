@@ -1,5 +1,6 @@
 package com.example.gradletest3.service.user;
 
+
 import com.example.gradletest3.dao.user.KakaoDTO;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -16,17 +17,18 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class KakaoService {
-
-    public String getKakaoAccessToken(String code) {
+public class NaverService {
+    public String getNaverAccessToken(String code) {
         String access_Token = "";
         String refresh_Token = "";
-        String reqURL = "https://kauth.kakao.com/oauth/token";
         String grant_type = "authorization_code";
-        String client_id = "6c751e5e4ce3f689acb1ae4884eec4d0";
-        String redirect_uri = "http://localhost:8081/user/kakao";
+        String redirect_uri = "http://localhost:8081/user/naver";
+        String client_id = "EgmSzlLPq2t3fwcT0yRm";
+        String client_secret = "FM0eQL3HhF";
+        String reqURL = "https://nid.naver.com/oauth2.0/token";
         String line = "";
         String result = "";
+
 
         try {
             URL url = new URL(reqURL);
@@ -37,17 +39,17 @@ public class KakaoService {
 
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
+
             sb.append("grant_type=" + grant_type);
             sb.append("&client_id=" + client_id);  // REST_API_KEY 입력
-            sb.append("&redirect_uri=" + redirect_uri); //redirect_uri 입력
+            sb.append("&client_secret=" + client_secret);
+//            sb.append("&redirect_uri=" + redirect_uri); //redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
 
-
-            //결과 코드가 200이면 성공
             int responseCode = conn.getResponseCode();
-            log.info("responseCode =" + responseCode);
+            log.info("responseCode = " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
@@ -56,7 +58,6 @@ public class KakaoService {
             }
             log.info("response body : " + result);
 
-            //Gson 라이브러리에 포함된 클래스로 JSON 파싱 객체 생성
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
@@ -75,67 +76,12 @@ public class KakaoService {
             throw new RuntimeException(e);
         }
         return access_Token;
+
     }
 
-    public void createKakaoUser(String token) {
-        String reqURL = "https://kapi.kakao.com/v2/user/me";
-        String line = "";
-        String result = "";
-        KakaoDTO kakaoDTO = null;
-
-        try {
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성 , acces_token 전송
-
-            //결과 코드가 200이라면 성공
-            int responseCode = conn.getResponseCode();
-            log.info("create responseCode : " + responseCode);
-
-            //요청을 통해 얻은 JSON 타입의 response 메세지 읽어오기
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            log.info("create response body : " + result);
-
-
-            //Gson 라이브러리로 JSON 파싱
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
-
-            int id = element.getAsJsonObject().get("id").getAsInt();
-            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
-            if (hasEmail) {
-                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            }
-            String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
-
-            log.info("id : " + id);
-            log.info("email : " + email);
-            log.info("nickname : " + nickname);
-            kakaoDTO.setKakaoAccount(kakaoDTO.getKakaoAccount());
-            kakaoDTO.setId((long) id);
-            kakaoDTO.setProperties(kakaoDTO.getProperties());
-
-            br.close();
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-//        return kakaoDTO;
-    }
-
-    public Map<String, Object> getUserInfo(String token) {
+    public Map<String, Object> getNaverInfo(String token) {
         Map<String, Object> resultMap = new HashMap<>();
-        String reqURL = "https://kapi.kakao.com/v2/user/me";
+        String reqURL = "https://openapi.naver.com/v1/nid/me";
         String line = "";
         String result = "";
         KakaoDTO kakaoDTO = null;
@@ -159,25 +105,16 @@ public class KakaoService {
             }
             log.info("create response body : " + result);
 
-
-            //Gson 라이브러리로 JSON 파싱
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
-            Long id = element.getAsJsonObject().get("id").getAsLong();
-            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
-            if (hasEmail) {
-                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            }
-            String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
+            String id = element.getAsJsonObject().get("response").getAsJsonObject().get("id").getAsString();
+            String email = element.getAsJsonObject().get("response").getAsJsonObject().get("email").getAsString();
 
             log.info("id : " + id);
-            log.info("email : " + email);
-            log.info("nickname : " + nickname);
-            resultMap.put("nickname", nickname);
-            resultMap.put("email", email);
+            log.info("email :" + email);
             resultMap.put("id", id);
+            resultMap.put("email", email);
 
             br.close();
 
@@ -189,11 +126,7 @@ public class KakaoService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         return resultMap;
     }
 
 }
-
-
